@@ -3,10 +3,12 @@
 #include<math.h>
 double absizb(double, double);
 double abspr(double, double);
+double absp(double, double);
 void main()
 {
 	setlocale(LC_ALL, "RUS");
 	double a, b, a1, b1;
+	puts("Задание 26 а):\n");
 	printf("Какое выражение точнее: 1) 12/11 = 1.091 или 2) sqrt(68) = 8.246\n");
 	printf("Значения выражений с большим количеством десятичных знаков:\n");
 	a1 = 1.091;
@@ -16,21 +18,41 @@ void main()
 	printf("1) 12/11 = %lf\n", a);
 	printf("2) sqrt(68) = %lf\n", b);
 	printf("Предельные абсолютные погрешности, округляя их с избытком:\n");
-	printf("1) %lf\n", absizb(a,a1));
+	printf("1) %lf\n", absizb(a, a1));
 	printf("2) %lf\n", absizb(b, b1));
 	printf("Предельные абсолютные погрешности составляют в процентах:\n");
-	printf("1) %lf\n", abspr(a1,a));
-	printf("2) %lf\n", abspr(b1,b));
-	printf("Значит, более точное выражение : 27 / 31 = 0.871\n");
+	printf("1) %lf\n", abspr(a, a1));
+	printf("2) %lf\n", abspr(b, b1));
+	if (abspr(a, a1) < abspr(b, b1))
+	{
+		printf("Значит, более точное выражение: 12/11 = 1.091\n");
+	}
+	else
+	{
+		printf("Значит, более точное выражение: sqrt(68) = 8.246\n");
+	}
+	puts("\nЗадание 26 б):\n");
+	printf("Округлить сомнительные цифры числа 0.5532+-0.0014, оставив верные знаки. Определить абсолютную погрешность результата\n");
+	double c, e;
+	e = 0.0014;
+	c = 0.5532;
+	printf("Абсолютная погрешность числа (по формуле связи погрешностей):\n");
+	printf("0.5532*0.0014=%.4f\n", absp(c, e));
+	printf("Сравнение разрядов чисел:\n");
+	
 }
 double absizb(double x, double dx)
 {
-	double d;
-	d = fabs(x - dx);
+	double d = fabs(x - dx);
 	return d;
 }
 double abspr(double d, double dx)
 {
-	double d1 = absizb(d,dx) / fabs(dx) * 100;
+	double d1 = absizb(d, dx) / fabs(dx) * 100;
 	return d1;
+}
+double absp(double f, double p)
+{
+	double d2 = f * p;
+	return d2;
 }
