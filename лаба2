@@ -6,7 +6,7 @@ void main()
 {
     setlocale(LC_ALL, "RUS");
     int n, k;
-    double xn, xk, dx, an, S1, S2, eps1 = 0.1, eps2 = 0.000001, f;
+    double xn, xk, dx, an, S1, S2, eps1 = 0.1, eps2 = 0.000001, f, count1=0, count2=0, c;
     puts("Задание 1.7");
     printf("Введите значение xn=");
     scanf("%lf", &xn);
@@ -14,7 +14,7 @@ void main()
     scanf("%lf", &xk);
     printf("Введите значение dx=");
     scanf("%lf", &dx);
-    printf("|    x    |    eps1    |    f1(x)    |    eps2    |    f2(x)    |    f    |\n");
+    printf("|    x    |    eps1    |    f1(x)    |  count1  |  count2  |    eps2    |    f2(x)    |    f    |\n");
     for (double x = xn; x <= xk + dx / 2.; x += dx)
     {
         n = 1;
@@ -23,7 +23,7 @@ void main()
         while (fabs(an) > eps1)
         {
             S1 += an;
-            an *= -(pow(x,2) / (2 * n * (2 * n + 1)));
+            an *= -(pow(x, 2) / (2 * n * (2 * n + 1)));
             n++;
         }
 
@@ -33,16 +33,23 @@ void main()
         while (fabs(an) > eps2)
         {
             S2 += an;
-            an *= -(pow(x,2) / (2 * k * (2 * k + 1)));
+            an *= -(pow(x, 2) / (2 * k * (2 * k + 1)));
             k++;
         }
+        do
+        {
+            c= -(pow(x, 2) / (2 * k * (2 * k + 1)));
+            count1 = +c;
+            k++;
+        } while (count1 >= 0.1);
         f = sin(x);
         printf("    %.2f    ", x);
         printf("    %.1f    ", eps1);
+        printf("    %f     ", count1);
         printf("     %.2f    ", S1);
         printf("   %.6f    ", eps2);
         printf("    %.2f    ", S2);
-        printf("   %lf   ", f);
+        printf("   %.2f    ", f);
         printf("\n");
     }
 
