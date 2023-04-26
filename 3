@@ -1,0 +1,195 @@
+#include <stdlib.h>
+#include <iostream>
+#include <locale.h>
+#include <math.h>
+#define exp = 2,7182818284
+
+using namespace std;
+
+double	F1(double x);
+double PF1(double x);
+double PF2(double x);
+
+int main()
+{
+	setlocale(LC_ALL, "RUS");
+	int ch2 = 1;
+	int ch1 = 0, n1 = 0, n2 = 0, n3 = 0, n4 = 0;
+	while (ch2 == 1)
+	{
+		double E, Y = 0, b1 = 0, a1 = 0, X = 0, DX = 0, f11 = 0, f22 = 0, fcc = 0, f1 = 0, f2 = 0, fc = 0, pf1 = 0, pf2 = 0;
+		cout << "Нелинейное уравнение: x^2cos(2x)+1=0" << endl << "Выберите метод решения уравнения:" << endl;
+		while (1 != 0)
+		{
+			cout << "Метод касательных - 1" << endl << "Метод дихотомии - 2" << endl << "Метод хорд - 3" << endl << "Комбинированный метод - 4" << endl << "Введите номер: " << endl;
+			cin >> ch1;
+			cout << endl;
+			if (ch1 != 1 && ch1 != 2 && ch1 != 3 && ch1 != 4)puts("  Вы ввели неправильный номер. Повторите\n");
+			else break;
+		}
+		cout << "Введите eps: " << endl;
+		cin >> E;
+		double a, b, c;
+		cout << "Задайте интервал:" << endl << "от | ";
+		cin >> a;
+		cout << "до | ";
+		cin >> b;
+
+		switch (ch1)
+		{
+		case 1:
+			if ((F1(a) * F1(b)) >= 0)cout << "   На данном отрезке корней нет";
+			else
+			{
+				f1 = F1(b);
+				pf2 = PF2(b);
+				n1++;
+				if ((f1 * pf2) > 0)X = b;
+				else X = a;
+				while (1 != 0)
+				{
+					f1 = F1(X);
+					pf1 = PF1(X);
+					DX = f1 / pf1;
+					X -= DX;
+					n1++;
+					if (abs(DX) <= E)
+					{
+						f1 = F1(X);
+						cout << "   Корень найден, Х = " << X << "\n   Функция = " << f1 << "\n   Совершено " << n1 << " итераций";
+						break;
+					}
+				}
+				break;
+			}
+		case 2:
+		{
+			if ((F1(a) * F1(b)) >= 0)cout << "   На данном отрезке корней нет";
+			else
+			{
+
+				while (1 != 0)
+				{
+					X = (a + b) / 2;
+					fc = F1(a);
+					fcc = F1(b);
+					f1 = F1(X);
+					if ((fc * f1) < 0)
+					{
+						b = X;
+					}
+					else if ((f1 * fcc) < 0) a = X;
+					n2++;
+
+					if (abs(b - a) <= 2 * E)
+					{
+						X = (a + b) / 2;
+						f1 = F1(X);
+						cout << "   Корень найден, Х = " << X << "\n   Функция = " << f1 << "\n   Совершено " << n2 << " итераций";
+						break;
+					}
+				}
+			}
+			break;
+
+		}
+		case 3:
+		{
+			if ((F1(a) * F1(b)) >= 0)cout << "   На данном отрезке корней нет";
+			else
+			{
+				fc = F1(a);
+				f1 = PF1(a);
+				f2 = PF2(a);
+				fcc = F1(b);
+				f11 = PF1(b);
+				f22 = PF2(2);
+				if ((fc * f2) > 0)
+				{
+					c = a;
+				}
+				else if ((fcc * f22) > 0)
+				{
+					c = b;
+				}
+				if ((fc * f2) < 0)
+				{
+					X = a;
+				}
+				else if ((fcc * f22) < 0)
+				{
+					X = b;
+				}
+				while (1 != 0)
+				{
+					DX = F1(X) * ((X - c) / (F1(X) - F1(c)));
+					X -= DX;
+					n3++;
+					if (abs(DX) <= E)
+					{
+						f1 = F1(X);
+						cout << "   Корень найден, Х = " << X << "\n   Функция = " << f1 << "\n   Совершено " << n3 << " итераций";
+						break;
+					}
+				}
+			}
+			break;
+		}
+		case 4:
+		{
+			if ((F1(a) * F1(b)) >= 0)cout << "   На данном отрезке корней нет";
+			else
+			{
+				a1 = a; b1 = b;
+
+				while (abs(a1 - b1) > 2 * E)
+				{
+					f1 = PF1(a1);
+					f2 = PF2(a1);
+					fc = F1(a1);
+					if ((fc * f2) < 0) a1 = a1 - fc * (a1 - b1) / (fc - F1(b1));
+					else a1 = a1 - fc / f1;
+
+					f11 = PF1(b1);
+					f22 = PF2(b1);
+					fcc = F1(b1);
+					if ((fcc * f22) < 0) b1 = b1 - fcc * (b1 - a1) / (fcc - F1(a1));
+					else b1 = b1 - fcc / f11;
+					n4++;
+				}
+				Y = (a1 + b1) / 2;
+				fc = F1(Y);
+				cout << "   Корень найден, Х = " << Y << "\n   Функция = " << fc << "/n    Совершено " << n4 << " итераций";
+			}
+			break;
+		}
+		}
+		cout << "   Вернуться к началу? да - 1, нет - 2\n   __";
+		cin >> ch2;
+		if (ch2 != 1 && ch2 != 2)
+		{
+			cout << "\n   Значит выходим... (хоть и цифра у вас не та";
+		}
+	}
+	if (n1 != 0, n2 != 0, n3 != 0, n4 != 0)
+	{
+		cout << "\n   Был вычислен корень выражения, 4 методами\n   Сравнение методов:\n   Метод касательных: " << n1 << " итераций(ия,ии)\n   Метод дихтотомии: " << n2 << " итераций(ия,ии)\n   Метод хорд: " << n3 << " итераций(ия,ии)\n   Комбинированный метод: " << n4 << " итераций(ия,ии)" << endl;
+	}
+	return 0;
+}
+
+double	F1(double x)
+{
+	double fx = pow(x, 2) * cos(2 * x) + 1;
+	return fx;
+}
+double PF1(double x)
+{
+	double pfx = 2*x*cos(2*x)-2*pow(x,2)*sin(2*x);
+	return pfx;
+}
+double PF2(double x)
+{
+	double fx2 = -6 * x * sin(2 * x) - 2 * pow(x, 2) * cos(2 * x) + 2 * cos(2 * x);
+	return fx2;
+}
